@@ -36,23 +36,34 @@ void setup() {
 * Main loop
 */
 void loop() {
-  unsigned long time = millis();
+  loopTime = millis();
   
-  // Update timer 
   timer.update();
   
-  // Check for button presses
   button.check();
   
-  // If the sensor hasn't been triggered in a while, the wheel has probably stopped
-  if (time - lastTrigger > timeoutValue) {
+  writeOdometer();
+  
+  checkForTimeout();
+}
+
+/*
+* Checks the last time the sensor was trigerred. If it's over a given
+* duration, we assume the wheel has stopped spinning.
+*/
+void checkForTimeout() {
+  if (loopTime - lastTrigger > timeoutValue) {
     rps = 0.0;
   }
-  
-  // Write odometer value to flash memory
-  if (time - lastOdometerWrite > odometerWriteFrequency) {
+}
+
+/*
+* Writes total miles to EEPROM
+*/
+void writeOdometer() {
+  if (loopTime - lastOdometerWrite > odometerWriteFrequency) {
     EEPROM.writeFloat(0x0, totalMiles);
-    lastOdometerWrite = time;
+    lastOdometerWrite = loopTime;
   }
 }
 

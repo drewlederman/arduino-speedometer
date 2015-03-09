@@ -1,3 +1,6 @@
+// Current millis updated on each loop
+unsigned long loopTime = 0;
+
 // The last time the hall effect sensor was triggered
 volatile unsigned long lastTrigger = 0;
 
