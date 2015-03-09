@@ -30,7 +30,7 @@ void Timer::update()
 {
   unsigned long time = millis();
   if (time - m_lastTime > m_interval) {
-    if (m_callback != NULL) {
+    if (m_callback) {
       m_callback();
     }
     m_lastTime = time;

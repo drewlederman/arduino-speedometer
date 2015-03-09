@@ -4,7 +4,8 @@ class Button
 
   public:
     Button(int pin, int pressedVal, unsigned long longPressTime);
-    void setHandlers(Handler press, Handler longPress);
+    void setPressHandler(Handler handler);
+    void setLongPressHandler(Handler handler);
     int check();
 
   private:
@@ -28,10 +29,14 @@ Button::Button(int pin, int pressedVal, unsigned long longPressTime) :
 {
 }
 
-void Button::setHandlers(Handler press, Handler longPress)
+void Button::setPressHandler(Handler handler)
 {
-  m_pressHandler = press;
-  m_longPressHandler = longPress;
+  m_pressHandler = handler;
+}
+
+void Button::setLongPressHandler(Handler handler)
+{
+  m_longPressHandler = handler;
 }
 
 int Button::check()

@@ -19,7 +19,6 @@ void setup() {
   
   // Read odometer value from flash memory
   totalMiles = EEPROM.readFloat(0x0);
-  Serial.println(totalMiles);
   
   // Intialize LED display
   alpha.begin(0x70);
@@ -29,7 +28,8 @@ void setup() {
   timer.every(100, updateDisplay);
   
   // Set up button handlers
-  button.setHandlers(buttonPressed, buttonLongPressed);
+  button.setPressHandler(buttonPressed);
+  button.setLongPressHandler(buttonLongPressed);
 }
 
 /*
@@ -114,10 +114,10 @@ void displayNumber(int value, int decimalPos, int minDigits) {
 * Converts a floating point number to an integer for display on the LED screen
 */
 int floatToInt(float value, int decimalPlaces) {
-  int power = pow(10, decimalPlaces);
+  int shift = pow(10, decimalPlaces);
   int whole = (int)value;
-  int fraction = (value - (float)whole) * power;
-  return (whole * power) + fraction;
+  int fraction = (value - (float)whole) * shift;
+  return (whole * shift) + fraction;
 }
 
 /*
@@ -127,8 +127,8 @@ int floatToInt(float value, int decimalPlaces) {
 void sensorTriggered() {
   unsigned long duration = millis() - lastTrigger;
   if (duration > 0) {
-    rps = 1000.0 / duration;
-    totalMiles += (wheelCircumference / 5280.0);
+    rps = 1000.0 / duration; // Update rotations per second
+    totalMiles += (wheelCircumference / 5280.0); // Increment odometer
   }
   lastTrigger = millis();
 }
